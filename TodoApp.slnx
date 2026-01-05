@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TodoApp.Application/TodoApp.Application.csproj" />
+  <Project Path="TodoApp.Domain/TodoApp.Domain.csproj" />
+  <Project Path="TodoApp.Infrastructure/TodoApp.Infrastructure.csproj" />
+  <Project Path="TodoApp.Web/TodoApp.Web.csproj" Id="43f367ef-370a-46a8-b131-f9f64b728621" />
+</Solution>

@@ -1,0 +1,15 @@
+﻿@model IReadOnlyList<TodoApp.Domain.Entities.TodoItem>
+
+<h2>Todo List</h2>
+
+<form asp-action="Create" method="post">
+    <input name="title" placeholder="Enter todo title" />
+    <button type="submit">Add</button>
+</form>
+
+<ul>
+    @foreach (var todo in Model)
+    {
+        <li>@todo.Title</li>
+    }
+</ul>
