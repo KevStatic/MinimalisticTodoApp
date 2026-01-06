@@ -29,3 +29,83 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+/* Todo list container */
+.todo-list {
+    list-style: none;
+    padding: 0;
+}
+
+/* Todo item layout */
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+/* Circle checkbox */
+.check-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #7b61ff;
+    background: white;
+    cursor: pointer;
+    position: relative;
+    padding: 0;
+}
+
+/* Filled circle when completed */
+.todo-item.completed .check-circle {
+    background: #7b61ff;
+}
+
+/* Checkmark */
+.checkmark {
+    color: white;
+    font-size: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+}
+
+/* Todo text */
+.todo-text {
+    position: relative;
+    padding-bottom: 2px;
+}
+
+/* Animated strike-through */
+.todo-item.completed .todo-text::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 2px;
+    width: 100%;
+    background: black;
+    animation: strike 0.35s ease-out forwards;
+}
+
+/* Strike animation */
+@keyframes strike {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+/* Delete button */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    font-size: 18px;
+    cursor: pointer;
+}

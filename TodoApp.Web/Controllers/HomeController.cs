@@ -6,16 +6,19 @@ namespace TodoApp.Web.Controllers
 {
     public class HomeController : Controller
     {
+        // Logger instance for logging purposes
         public IActionResult Index()
         {
             return View();
         }
 
+        // Privacy action to display privacy information
         public IActionResult Privacy()
         {
             return View();
         }
 
+        // Error action to handle errors and display error information
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

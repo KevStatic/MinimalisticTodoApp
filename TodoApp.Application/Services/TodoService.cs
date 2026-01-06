@@ -34,4 +34,20 @@ public class TodoService
     {
         return _todoRepository.GetAll().Count + 1;
     }
+    public void ToggleCompleteTodo(int id)
+    {
+        var todo = _todoRepository.GetById(id);
+        if (todo == null) return;
+
+        todo.ToggleCompleted();
+        _todoRepository.Update(todo);
+    }
+
+    public void DeleteTodo(int id)
+    {
+        var todo = _todoRepository.GetById(id);
+        if (todo == null) return;
+        _todoRepository.Remove(todo);
+    }
+
 }

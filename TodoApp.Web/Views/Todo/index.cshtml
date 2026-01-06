@@ -3,13 +3,33 @@
 <h2>Todo List</h2>
 
 <form asp-action="Create" method="post">
-    <input name="title" placeholder="Enter todo title" />
+    <input name="title" placeholder="Enter todo title" required />
     <button type="submit">Add</button>
 </form>
 
-<ul>
+<ul class="todo-list">
     @foreach (var todo in Model)
     {
-        <li>@todo.Title</li>
+        <li class="todo-item @(todo.IsCompleted ? "completed" : "")">
+
+            <form asp-action="ToggleComplete" method="post" class="complete-form">
+                <input type="hidden" name="id" value="@todo.Id" />
+                <button type="submit" class="check-circle">
+                    @if (todo.IsCompleted)
+                    {
+                        <span class="checkmark">✓</span>
+                    }
+                </button>
+            </form>
+
+            <span class="todo-text">@todo.Title</span>
+
+            <form asp-action="Delete" method="post" class="delete-form">
+                <input type="hidden" name="id" value="@todo.Id" />
+                <button type="submit" class="delete-btn">✕</button>
+            </form>
+
+        </li>
     }
 </ul>
+

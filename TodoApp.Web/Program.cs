@@ -2,11 +2,20 @@ using TodoApp.Application.Services;
 using TodoApp.Domain.Interfaces;
 using TodoApp.Infrastructure.Repositories;
 
+using Microsoft.EntityFrameworkCore;
+using TodoApp.Infrastructure.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<ITodoRepository, InMemoryTodoRepository>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite("Data Source = todo.db"));
+
+builder.Services.AddScoped<ITodoRepository, EfTodoRepository>();
+
 builder.Services.AddScoped<TodoService>();
 
 var app = builder.Build();
