@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TodoApp.Domain.Entities;
+﻿using TodoApp.Application.Common;
+using TodoApp.Application.DTOs;
+using TodoApp.Application.UseCases;
 using TodoApp.Domain.Interfaces;
 
 namespace TodoApp.Application.Services;
@@ -9,45 +8,39 @@ namespace TodoApp.Application.Services;
 public class TodoService
 {
     private readonly ITodoRepository _todoRepository;
+    private readonly CreateTodoUseCase _createTodo;
+    private readonly ToggleTodoUseCase _toggleTodo;
+    private readonly DeleteTodoUseCase _deleteTodo;
 
     public TodoService(ITodoRepository todoRepository)
     {
         _todoRepository = todoRepository;
+        _createTodo = new CreateTodoUseCase(todoRepository);
+        _toggleTodo = new ToggleTodoUseCase(todoRepository);
+        _deleteTodo = new DeleteTodoUseCase(todoRepository);
     }
 
-    public IReadOnlyList<TodoItem> GetAllTodos()
+    // Query to get all Todo items
+    public async Task<IReadOnlyList<TodoDto>> GetAllTodosAsync()
     {
-        return _todoRepository.GetAll();
+        var todos = await _todoRepository.GetAllAsync();
+
+        return todos.Select(t => new TodoDto
+        {
+            Id = t.Id,
+            Title = t.Title,
+            IsCompleted = t.IsCompleted
+        }).ToList();
     }
 
-    public void CreateTodo(string title)
-    {
-        if (string.IsNullOrWhiteSpace(title))
-            throw new ArgumentException("Title cannot be empty");
+    // Commands delegate to use cases asynchronously
+    public Task<Result> CreateTodoAsync(string title)
+    => _createTodo.ExecuteAsync(title);
 
-        var id = GenerateId();
-        var todo = new TodoItem(id, title);
+    public Task<Result> ToggleCompleteTodoAsync(int id)
+        => _toggleTodo.ExecuteAsync(id);
 
-        _todoRepository.Add(todo);
-    }
-    private int GenerateId()
-    {
-        return _todoRepository.GetAll().Count + 1;
-    }
-    public void ToggleCompleteTodo(int id)
-    {
-        var todo = _todoRepository.GetById(id);
-        if (todo == null) return;
-
-        todo.ToggleCompleted();
-        _todoRepository.Update(todo);
-    }
-
-    public void DeleteTodo(int id)
-    {
-        var todo = _todoRepository.GetById(id);
-        if (todo == null) return;
-        _todoRepository.Remove(todo);
-    }
+    public Task<Result> DeleteTodoAsync(int id)
+        => _deleteTodo.ExecuteAsync(id);
 
 }

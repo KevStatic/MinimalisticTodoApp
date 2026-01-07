@@ -1,35 +1,36 @@
-﻿@model IReadOnlyList<TodoApp.Domain.Entities.TodoItem>
+﻿@model IReadOnlyList<TodoApp.Application.DTOs.TodoDto>
 
-<h2>Todo List</h2>
+<div class="todo-container">
 
-<form asp-action="Create" method="post">
-    <input name="title" placeholder="Enter todo title" required />
-    <button type="submit">Add</button>
-</form>
+    <h2 class="center">Todo List</h2>
 
-<ul class="todo-list">
-    @foreach (var todo in Model)
-    {
-        <li class="todo-item @(todo.IsCompleted ? "completed" : "")">
+    <form asp-action="Create" method="post" class="todo-input">
+        <input name="title" placeholder="Add a task..." required />
+        <button type="submit">Add</button>
+    </form>
 
-            <form asp-action="ToggleComplete" method="post" class="complete-form">
-                <input type="hidden" name="id" value="@todo.Id" />
-                <button type="submit" class="check-circle">
-                    @if (todo.IsCompleted)
-                    {
-                        <span class="checkmark">✓</span>
-                    }
-                </button>
-            </form>
+    <ul class="todo-list">
+        @foreach (var todo in Model)
+        {
+            <li class="todo-item @(todo.IsCompleted ? "completed" : "")">
 
-            <span class="todo-text">@todo.Title</span>
+                <!-- toggle -->
+                <form asp-action="ToggleComplete" method="post" class="toggle-form">
+                    <input type="hidden" name="id" value="@todo.Id" />
+                    <button type="submit" class="check-circle"></button>
+                </form>
 
-            <form asp-action="Delete" method="post" class="delete-form">
-                <input type="hidden" name="id" value="@todo.Id" />
-                <button type="submit" class="delete-btn">✕</button>
-            </form>
+                <!-- text -->
+                <span class="todo-text">@todo.Title</span>
 
-        </li>
-    }
-</ul>
+                <!-- delete -->
+                <form asp-action="Delete" method="post" class="delete-form">
+                    <input type="hidden" name="id" value="@todo.Id" />
+                    <button type="submit" class="delete-btn">✕</button>
+                </form>
 
+            </li>
+        }
+    </ul>
+
+</div>

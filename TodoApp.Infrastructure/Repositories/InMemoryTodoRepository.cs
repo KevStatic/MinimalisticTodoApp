@@ -31,4 +31,26 @@ public class InMemoryTodoRepository : ITodoRepository
     {
         _todos.Remove(item);
     }
+
+    public Task<IReadOnlyList<TodoItem>> GetAllAsync()
+    {
+        return Task.FromResult((IReadOnlyList<TodoItem>)_todos);
+    }
+
+    public Task<TodoItem?> GetByIdAsync(int id)
+    {
+        return Task.FromResult(GetById(id));
+    }
+
+    public Task AddAsync(TodoItem todo)
+    {
+        Add(todo);
+        return Task.CompletedTask;
+    }
+
+    public Task UpdateAsync(TodoItem todo)
+    {
+        Update(todo);
+        return Task.CompletedTask;
+    }
 }

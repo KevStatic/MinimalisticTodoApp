@@ -5,59 +5,37 @@ namespace TodoApp.Web.Controllers;
 
 public class TodoController : Controller
 {
-    // Service to manage todo items
     private readonly TodoService _todoService;
 
-    // Constructor injection of the TodoService
     public TodoController(TodoService todoService)
     {
         _todoService = todoService;
     }
 
-    // Index action to display all todo items
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var todos = _todoService.GetAllTodos();
+        var todos = await _todoService.GetAllTodosAsync();
         return View(todos);
     }
 
-    // Create action to add a new todo item
     [HttpPost]
-    public IActionResult Create(string title)
+    public async Task<IActionResult> Create(string title)
     {
-        if (string.IsNullOrWhiteSpace(title))
-        {
-            ModelState.AddModelError("Title", "Title cannot be empty");
-            return RedirectToAction(nameof(Index));
-        }
-        _todoService.CreateTodo(title);
-        return RedirectToAction("Index");
-    }
-
-    // Completed action to mark a todo item as completed
-    [HttpPost]
-    public IActionResult Complete(int id)
-    {
-        _todoService.ToggleCompleteTodo(id);
+        await _todoService.CreateTodoAsync(title);
         return RedirectToAction(nameof(Index));
     }
 
-    // Make it so that when the user again clicks on the completed todo item, it marks it as not completed
     [HttpPost]
-    public IActionResult ToggleComplete(int id)
+    public async Task<IActionResult> ToggleComplete(int id)
     {
-        _todoService.ToggleCompleteTodo(id);
+        await _todoService.ToggleCompleteTodoAsync(id);
         return RedirectToAction(nameof(Index));
     }
 
-    // Delete action to remove a todo item
     [HttpPost]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        _todoService.DeleteTodo(id);
+        await _todoService.DeleteTodoAsync(id);
         return RedirectToAction(nameof(Index));
     }
-
-    
-
 }

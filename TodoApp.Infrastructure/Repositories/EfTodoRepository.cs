@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using Microsoft.EntityFrameworkCore;
 using TodoApp.Domain.Entities;
 using TodoApp.Domain.Interfaces;
 using TodoApp.Infrastructure.Data;
-
-namespace TodoApp.Infrastructure.Repositories;
 
 public class EfTodoRepository : ITodoRepository
 {
@@ -17,31 +12,25 @@ public class EfTodoRepository : ITodoRepository
         _context = context;
     }
 
-    public IReadOnlyList<TodoItem> GetAll()
+    public async Task<IReadOnlyList<TodoItem>> GetAllAsync()
     {
-        return _context.Todos.ToList();
+        return await _context.Todos.ToListAsync();
     }
 
-    public TodoItem? GetById(int id)
+    public async Task<TodoItem?> GetByIdAsync(int id)
     {
-        return _context.Todos.FirstOrDefault(t => t.Id == id);
+        return await _context.Todos.FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public void Add(TodoItem item)
+    public async Task AddAsync(TodoItem item)
     {
-        _context.Todos.Add(item);
-        _context.SaveChanges();
+        await _context.Todos.AddAsync(item);
+        await _context.SaveChangesAsync();
     }
 
-    public void Update(TodoItem item)
+    public async Task UpdateAsync(TodoItem item)
     {
         _context.Todos.Update(item);
-        _context.SaveChanges();
-    }
-
-    public void Remove(TodoItem item)
-    {
-        _context.Todos.Remove(item);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
     }
 }
