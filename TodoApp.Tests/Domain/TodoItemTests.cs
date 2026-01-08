@@ -23,4 +23,13 @@ public class TodoItemTests
         var todo = new TodoItem("Valid title");
         Assert.Equal("Valid title", todo.Title);
     }
+
+    [Fact]
+    public void Todo_Cannot_BeCreated_With_LongTitle()
+    {
+        var title = new string('a', 201);
+
+        Assert.Throws<DomainException>(() => new TodoItem(title));
+    }
+
 }

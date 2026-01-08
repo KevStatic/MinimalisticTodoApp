@@ -1,10 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using TodoApp.Application.Services;
 using TodoApp.Domain.Interfaces;
-using TodoApp.Infrastructure.Repositories;
-
-using Microsoft.EntityFrameworkCore;
 using TodoApp.Infrastructure.Data;
-
+using TodoApp.Infrastructure.Repositories;
+using TodoApp.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source = todo.db"));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
 
 builder.Services.AddScoped<ITodoRepository, EfTodoRepository>();
 
@@ -29,7 +30,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles();
+
 app.UseRouting();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthorization();
 

@@ -11,13 +11,16 @@ public class TodoService
     private readonly CreateTodoUseCase _createTodo;
     private readonly ToggleTodoUseCase _toggleTodo;
     private readonly DeleteTodoUseCase _deleteTodo;
+    private readonly EditTodoUseCase _editTodo;
 
+    // Constructor
     public TodoService(ITodoRepository todoRepository)
     {
         _todoRepository = todoRepository;
         _createTodo = new CreateTodoUseCase(todoRepository);
         _toggleTodo = new ToggleTodoUseCase(todoRepository);
         _deleteTodo = new DeleteTodoUseCase(todoRepository);
+        _editTodo = new EditTodoUseCase(todoRepository);
     }
 
     // Query to get all Todo items
@@ -42,5 +45,8 @@ public class TodoService
 
     public Task<Result> DeleteTodoAsync(int id)
         => _deleteTodo.ExecuteAsync(id);
+    public Task<Result> EditTodoAsync(int id, string title)
+    => _editTodo.ExecuteAsync(id, title);
+
 
 }

@@ -140,9 +140,9 @@ body {
     cursor: pointer;
 }
 
-    .todo-input button:hover {
-        background: #1e4ed8;
-    }
+.todo-input button:hover {
+    background: #1e4ed8;
+}
 
 /* List */
 .todo-list {
@@ -219,4 +219,80 @@ body {
 
 .delete-btn:hover {
     color: #ef4444;
+}
+
+.error-banner {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.edit-btn {
+    margin-left: 8px;
+    text-decoration: none;
+    color: #666;
+}
+
+.edit-btn:hover {
+    color: #000;
+}
+
+.todo-text {
+    position: relative;
+}
+
+.todo-item.completed .todo-text::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 2px;
+    background: #999;
+    width: 0;
+    animation: strike 0.3s ease forwards;
+}
+
+@keyframes strike {
+    to {
+        width: 100%;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+.todo-text {
+    cursor: pointer;
+}
+
+.todo-edit {
+    flex: 1;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    background: transparent;
+    border-bottom: 2px solid #6366f1;
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.todo-edit {
+    animation: fadeIn 0.12s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }

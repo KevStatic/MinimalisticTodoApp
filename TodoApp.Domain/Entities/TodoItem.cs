@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using TodoApp.Domain.Exceptions;
 
 namespace TodoApp.Domain.Entities;
@@ -31,10 +32,22 @@ public class TodoItem
     // Private parameterless constructor for ORM or serialization purposes
     private TodoItem() { } // For EF Core or serialization
 
+    public const int MaxTitleWordCount = 200;
+
     // Constructor to initialize a new todo item
     public TodoItem(string title)
     {
-        Title = title;
+        if (string.IsNullOrWhiteSpace(title))
+            throw new DomainException("Title cannot be empty");
+
+        var trimmed = title.Trim();
+        var wordCount = CountWords(trimmed);
+        if (wordCount > MaxTitleWordCount)
+            throw new DomainException($"Title cannot exceed {MaxTitleWordCount} words");
+
+        Title = trimmed;
+        IsCompleted = false;
+        IsDeleted = false;
         CreatedAt = DateTime.UtcNow;
     }
 
@@ -64,9 +77,33 @@ public class TodoItem
         if (string.IsNullOrWhiteSpace(title))
             throw new DomainException("Todo title cannot be empty");
 
+        var trimmed = title.Trim();
+        var wordCount = CountWords(trimmed);
+        if (wordCount > MaxTitleWordCount)
+            throw new DomainException($"Todo title cannot exceed {MaxTitleWordCount} words");
+
+        Title = trimmed;
+    }
+
+    // Counts words by splitting on one or more whitespace sequences.
+    private static int CountWords(string text)
+    {
+        // Treat consecutive whitespace as a single separator, ignore leading/trailing spaces.
+        // Words are sequences of non-whitespace characters.
+        var parts = Regex.Split(text.Trim(), @"\s+");
+        return parts.Length == 1 && parts[0].Length == 0 ? 0 : parts.Length;
+    }
+
+    // Method to rename the todo item
+    public void Rename(string title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            throw new DomainException("Title cannot be empty");
+
         if (title.Length > 200)
-            throw new DomainException("Todo title cannot exceed 200 characters");
+            throw new DomainException("Title cannot exceed 200 characters");
 
         Title = title.Trim();
     }
+
 }

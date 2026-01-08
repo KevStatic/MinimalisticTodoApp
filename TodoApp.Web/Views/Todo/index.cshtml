@@ -1,5 +1,20 @@
 ﻿@model IReadOnlyList<TodoApp.Application.DTOs.TodoDto>
 
+@if (TempData["Error"] != null)
+{
+    <div class="error-banner">
+        @TempData["Error"]
+    </div>
+}
+
+@if (!Model.Any())
+{
+  <div class="empty-state">
+    <p>No tasks yet.</p>
+    <small>Add one above 👆 </small>
+  </div>
+}
+
 <div class="todo-container">
 
     <h2 class="center">Todo List</h2>
@@ -12,23 +27,28 @@
     <ul class="todo-list">
         @foreach (var todo in Model)
         {
-            <li class="todo-item @(todo.IsCompleted ? "completed" : "")">
+            <li class="todo-item @(todo.IsCompleted ? "completed" : "")"
+                data-id="@todo.Id">
 
-                <!-- toggle -->
-                <form asp-action="ToggleComplete" method="post" class="toggle-form">
+                <!-- Toggle -->
+                <form asp-action="ToggleComplete" method="post" class="complete-form">
                     <input type="hidden" name="id" value="@todo.Id" />
                     <button type="submit" class="check-circle"></button>
                 </form>
 
-                <!-- text -->
+                <!-- Read mode -->
                 <span class="todo-text">@todo.Title</span>
 
-                <!-- delete -->
+                <!-- Edit mode (hidden by default) -->
+                <input type="text"
+                       class="todo-edit hidden"
+                       value="@todo.Title" />
+
+                <!-- Delete -->
                 <form asp-action="Delete" method="post" class="delete-form">
                     <input type="hidden" name="id" value="@todo.Id" />
                     <button type="submit" class="delete-btn">✕</button>
                 </form>
-
             </li>
         }
     </ul>
