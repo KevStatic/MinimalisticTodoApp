@@ -1,0 +1,51 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - TodoApp</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="app-body">
+
+    <div class="app-shell">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            
+            <div class="sidebar-title">TodoApp</div>
+
+            <nav class="sidebar-nav">
+                <a href="/Todo" class="nav-item active">My Day</a>
+                <a href="/Todo" class="nav-item">All Tasks</a>
+                <a href="#" class="nav-item">Important</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="profile-btn" aria-label="Profile">
+                    👤
+                </button>
+
+                <button id="theme-toggle" class="theme-toggle position-absolute float-end" aria-label="Toggle theme">
+                    🌙
+                </button>
+            </div>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/js/theme.js"></script>
+    <script src="~/js/add-task.js"></script>
+    <script src="~/js/delete-task.js"></script>
+
+</body>
+</html>

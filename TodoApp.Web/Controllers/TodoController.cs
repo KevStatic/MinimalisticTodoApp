@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TodoApp.Application.Services;
-using TodoApp.Web.ViewModels;
 
 namespace TodoApp.Web.Controllers;
 
 public class TodoController : Controller
 {
     private readonly TodoService _todoService;
+
+    public record UpdateTodoTitleRequest(int Id, string Title);
 
     // Constructor
     public TodoController(TodoService todoService)
@@ -22,7 +23,7 @@ public class TodoController : Controller
         return View(todos);
     }
 
-    // Add a new Todo item
+    // Add a new Todo item (form POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateTodoViewModel model)
@@ -41,7 +42,6 @@ public class TodoController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-
     // Toggle the completion status of a Todo item
     [HttpPost]
     public async Task<IActionResult> ToggleComplete(int id)
@@ -58,44 +58,44 @@ public class TodoController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // Edit a Todo item GET
-    [HttpGet]
-    public async Task<IActionResult> Edit(int id)
+    [HttpPost]
+    public async Task<IActionResult> UpdateTitle([FromBody] UpdateTodoTitleRequest request)
     {
-        var todos = await _todoService.GetAllTodosAsync();
-        var todo = todos.FirstOrDefault(t => t.Id == id);
-        if (todo == null)
-            return NotFound();
-
-        var vm = new EditTodoViewModel
-        {
-            Id = todo.Id,
-            Title = todo.Title
-        };
-
-        return View(vm);
+        await _todoService.EditTodoAsync(request.Id, request.Title);
+        return Ok();
     }
 
-    // Edit a Todo item POST
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(EditTodoViewModel model)
+    [Route("api/todo/create")]
+    public async Task<IActionResult> CreateApi([FromBody] CreateTodoViewModel model)
     {
-        if (!ModelState.IsValid)
-            return View(model);
+        if (string.IsNullOrWhiteSpace(model.Title))
+            return BadRequest();
 
-        var result = await _todoService.EditTodoAsync(model.Id, model.Title);
+        var result = await _todoService.CreateTodoAsync(model.Title);
 
         if (!result.Success)
-        {
-            ModelState.AddModelError("", result.Error);
-            return View(model);
-        }
+            return BadRequest(result.Error);
 
-        return RedirectToAction(nameof(Index));
+        return Ok(); // ✅ unchanged
     }
 
+    [HttpGet]
+    [Route("api/todo/latest")]
+    public async Task<IActionResult> GetLatest()
+    {
+        var todos = await _todoService.GetAllTodosAsync();
+        var latest = todos.OrderByDescending(t => t.Id).FirstOrDefault();
 
+        return Ok(latest);
+    }
 
+    [HttpDelete]
+    [Route("api/todo/{id}")]
+    public async Task<IActionResult> DeleteApi(int id)
+    {
+        await _todoService.DeleteTodoAsync(id);
+        return Ok();
+    }
 
 }

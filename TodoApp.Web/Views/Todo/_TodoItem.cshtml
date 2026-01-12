@@ -1,0 +1,14 @@
+﻿@model TodoApp.Application.DTOs.TodoDto
+
+<li class="todo-item" data-id="@Model.Id">
+    <input type="checkbox" class="todo-check" @(Model.IsCompleted ? "checked" : "") />
+
+    <span class="todo-text">@Model.Title</span>
+
+    <input type="text"
+           class="todo-edit hidden"
+           value="@Model.Title"
+           maxlength="200" />
+
+    <button type="button" class="todo-delete" aria-label="Delete task">🗑</button>
+</li>

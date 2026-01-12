@@ -25,6 +25,7 @@ public sealed class DeleteTodoUseCase
             todo.Delete();
             await _todoRepository.UpdateAsync(todo);
             return Result.Ok();
+
         }
         catch (DomainException ex)
         {

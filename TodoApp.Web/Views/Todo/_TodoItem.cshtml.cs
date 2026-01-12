@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace TodoApp.Web.Views.Todo
 {
-    public class EditModel : PageModel
+    public class _TodoItemModel : PageModel
     {
         public void OnGet()
         {
