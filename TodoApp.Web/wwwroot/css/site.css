@@ -4,7 +4,7 @@
 
 :root {
     --bg-main: #fafafa;
-    --bg-card: #ffffff;
+    --bg-card: #e5e7eb;
     --bg-sidebar: #f7f7f7;
     --text-primary: #111;
     --text-secondary: #555;
@@ -165,7 +165,8 @@ APP SHELL
 
 .app-shell {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
 }
 /* =========================
 SIDEBAR
@@ -177,11 +178,12 @@ SIDEBAR
     position: fixed;
     top: 0;
     left: 0;
+    bottom: 0;
 
     background-color: #9ca3af;
     padding: 16px;
-    
     display: flex;
+    
     flex-direction: column;
     flex-shrink: 0;
 }
@@ -232,9 +234,10 @@ MAIN CONTENT
     background-color: #fafafa;
     background-color: var(--bg-main);
     color: var(--text-primary);
-    overflow-y: auto;
-    height: 100vh;
     margin-left: 240px;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 /* =========================
 TODO PAGE

@@ -2,31 +2,23 @@
     const btn = e.target.closest(".todo-delete");
     if (!btn) return;
 
-    e.stopPropagation();
-
     const li = btn.closest(".todo-item");
     const id = li.dataset.id;
 
-    if (!id) return;
+    try {
+        const res = await fetch(`/api/todo/${id}`, {
+            method: "DELETE"
+        });
 
-    const confirmDelete = confirm("Delete this task?");
-    if (!confirmDelete) return;
+        if (!res.ok) throw new Error();
 
-    btn.disabled = true;
+        // smooth UI removal
+        li.style.opacity = "0";
+        li.style.height = "0";
+        li.style.margin = "0";
+        setTimeout(() => li.remove(), 200);
 
-    const res = await fetch(`/api/todo/${id}`, {
-        method: "DELETE"
-    });
-
-    if (!res.ok) {
-        alert("Failed to delete task");
-        btn.disabled = false;
-        return;
+    } catch {
+        console.error("Delete failed");
     }
-
-    li.classList.add("removing");
-
-    setTimeout(() => {
-        li.remove();
-    }, 200);
 });

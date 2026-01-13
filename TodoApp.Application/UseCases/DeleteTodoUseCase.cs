@@ -20,18 +20,12 @@ public sealed class DeleteTodoUseCase
         if (todo == null)
             return Result.Fail("Todo not found");
 
-        try
-        {
-            todo.Delete();
-            await _todoRepository.UpdateAsync(todo);
-            return Result.Ok();
+        _todoRepository.Remove(todo);
+        await _todoRepository.SaveChangesAsync(); // 🔥 REQUIRED
 
-        }
-        catch (DomainException ex)
-        {
-            return Result.Fail(ex.Message);
-        }
+        return Result.Ok();
     }
+
 
 
 }

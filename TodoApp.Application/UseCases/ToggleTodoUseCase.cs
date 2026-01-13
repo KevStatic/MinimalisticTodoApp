@@ -23,16 +23,11 @@ public sealed class ToggleTodoUseCase
         if (todo == null)
             return Result.Fail("Todo not found");
 
-        try
-        {
-            todo.ToggleCompleted();
-            await _todoRepository.UpdateAsync(todo);
-            return Result.Ok();
-        }
-        catch (DomainException ex)
-        {
-            return Result.Fail(ex.Message);
-        }
+        todo.ToggleCompleted();
+
+        await _todoRepository.UpdateAsync(todo);
+
+        return Result.Ok();
     }
 
 

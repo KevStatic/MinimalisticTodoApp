@@ -21,4 +21,14 @@ public class FakeTodoRepository : ITodoRepository
 
     public Task UpdateAsync(TodoItem item)
         => Task.CompletedTask;
+
+    public void Remove(TodoItem todo)
+    {
+        _todos.Remove(todo);
+    }
+
+    public Task SaveChangesAsync()
+    {
+        return Task.CompletedTask;
+    }
 }

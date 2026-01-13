@@ -25,12 +25,20 @@ public class EfTodoRepository : ITodoRepository
     public async Task AddAsync(TodoItem item)
     {
         await _context.Todos.AddAsync(item);
-        await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(TodoItem item)
+    public Task UpdateAsync(TodoItem todo)
     {
-        _context.Todos.Update(item);
+        return Task.CompletedTask;
+    }
+
+    public void Remove(TodoItem todo)
+    {
+        _context.Todos.Remove(todo);
+    }
+
+    public async Task SaveChangesAsync()
+    {
         await _context.SaveChangesAsync();
     }
 }

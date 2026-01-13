@@ -35,7 +35,6 @@ function renderTodo(todo) {
     <input type="checkbox" class="todo-check" />
     <span class="todo-text">${todo.title}</span>
     <input class="todo-edit hidden" />
-
     <button class="todo-delete" aria-label="Delete">🗑</button>
 </li>
 `;

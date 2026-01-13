@@ -94,8 +94,12 @@ public class TodoController : Controller
     [Route("api/todo/{id}")]
     public async Task<IActionResult> DeleteApi(int id)
     {
-        await _todoService.DeleteTodoAsync(id);
-        return Ok();
+        var result = await _todoService.DeleteTodoAsync(id);
+
+        if (!result.Success)
+            return BadRequest(result.Error);
+
+        return Ok(new { success = true });
     }
 
 }

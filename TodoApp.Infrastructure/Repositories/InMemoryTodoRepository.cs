@@ -27,11 +27,6 @@ public class InMemoryTodoRepository : ITodoRepository
         // Nothing required for in-memory
     }
 
-    public void Remove(TodoItem item)
-    {
-        _todos.Remove(item);
-    }
-
     public Task<IReadOnlyList<TodoItem>> GetAllAsync()
     {
         return Task.FromResult((IReadOnlyList<TodoItem>)_todos);
@@ -53,4 +48,16 @@ public class InMemoryTodoRepository : ITodoRepository
         Update(todo);
         return Task.CompletedTask;
     }
+
+    public void Remove(TodoItem todo)
+    {
+        _todos.Remove(todo);
+    }
+
+    public Task SaveChangesAsync()
+    {
+        // In-memory repo doesn't persist, so just return completed task
+        return Task.CompletedTask;
+    }
+
 }
